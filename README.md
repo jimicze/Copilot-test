@@ -70,10 +70,7 @@ const isAfter = DateUtil.isAfter(date2, date1); // true
 const isBefore = DateUtil.isBefore(date1, date2); // true
 
 // Check if two dates represent the same day
-const isSameDay = DateUtil.isSameDay(
-  new Date('2024-01-01T10:00:00'),
-  new Date('2024-01-01T15:30:00')
-); // true
+const isSameDay = DateUtil.isSameDay(new Date('2024-01-01T10:00:00'), new Date('2024-01-01T15:30:00')); // true
 ```
 
 ### Date Differences
@@ -93,32 +90,32 @@ const yearsBetween = DateUtil.getDateDiff(start, end, 'years'); // 0
 
 ### Formatting and Parsing
 
-- **`formatDate(date: Date, format: string): string`**  
-  Formats a Date object according to the specified format.
+-   **`formatDate(date: Date, format: string): string`**  
+    Formats a Date object according to the specified format.
 
-- **`parseDate(dateString: string, format: string): Date | null`**  
-  Parses a date string according to the specified format.
+-   **`parseDate(dateString: string, format: string): Date | null`**  
+    Parses a date string according to the specified format.
 
 ### Date Manipulation
 
-- **`addTime(date: Date, amount: number, unit: 'day' | 'week' | 'month' | 'year'): Date`**  
-  Returns a new Date with the specified time amount added.
+-   **`addTime(date: Date, amount: number, unit: 'day' | 'week' | 'month' | 'year'): Date`**  
+    Returns a new Date with the specified time amount added.
 
 ### Date Comparison
 
-- **`isAfter(date1: Date, date2: Date): boolean`**  
-  Returns true if date1 is after date2.
+-   **`isAfter(date1: Date, date2: Date): boolean`**  
+    Returns true if date1 is after date2.
 
-- **`isBefore(date1: Date, date2: Date): boolean`**  
-  Returns true if date1 is before date2.
+-   **`isBefore(date1: Date, date2: Date): boolean`**  
+    Returns true if date1 is before date2.
 
-- **`isSameDay(date1: Date, date2: Date): boolean`**  
-  Returns true if date1 and date2 represent the same day.
+-   **`isSameDay(date1: Date, date2: Date): boolean`**  
+    Returns true if date1 and date2 represent the same day.
 
 ### Date Calculations
 
-- **`getDateDiff(date1: Date, date2: Date, unit: 'days' | 'weeks' | 'months' | 'years'): number`**  
-  Calculates the difference between two dates in the specified unit.
+-   **`getDateDiff(date1: Date, date2: Date, unit: 'days' | 'weeks' | 'months' | 'years'): number`**  
+    Calculates the difference between two dates in the specified unit.
 
 ## Contributing
 
