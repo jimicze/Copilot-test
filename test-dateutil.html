@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>DateUtil Test Page</title>
+		<style>
+			body {
+				font-family: Arial, sans-serif;
+				max-width: 800px;
+				margin: 0 auto;
+				padding: 20px;
+				background-color: #f5f5f5;
+			}
+			.container {
+				background: white;
+				padding: 20px;
+				border-radius: 8px;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				margin-bottom: 20px;
+			}
+			.test-section {
+				margin-bottom: 30px;
+				padding: 15px;
+				border: 1px solid #ddd;
+				border-radius: 5px;
+			}
+			input,
+			select,
+			button {
+				margin: 5px;
+				padding: 8px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+			}
+			button {
+				background-color: #007bff;
+				color: white;
+				cursor: pointer;
+			}
+			button:hover {
+				background-color: #0056b3;
+			}
+			.result {
+				background-color: #e9ecef;
+				padding: 10px;
+				margin-top: 10px;
+				border-radius: 4px;
+				font-family: monospace;
+			}
+			h1,
+			h2 {
+				color: #333;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>DateUtil Test Page</h1>
+
+		<div class="container">
+			<div class="test-section">
+				<h2>1. Format Date</h2>
+				<input type="date" id="formatInput" value="2024-03-10" />
+				<select id="formatPattern">
+					<option value="YYYY-MM-DD">YYYY-MM-DD</option>
+					<option value="DD-MM-YYYY">DD-MM-YYYY</option>
+					<option value="YYYY">YYYY</option>
+					<option value="MM-DD">MM-DD</option>
+				</select>
+				<button onclick="testFormatDate()">Format Date</button>
+				<div id="formatResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h2>2. Parse Date</h2>
+				<input type="text" id="parseInput" placeholder="2024-03-10" value="2024-03-10" />
+				<select id="parsePattern">
+					<option value="YYYY-MM-DD">YYYY-MM-DD</option>
+					<option value="DD-MM-YYYY">DD-MM-YYYY</option>
+				</select>
+				<button onclick="testParseDate()">Parse Date</button>
+				<div id="parseResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h2>3. Add Time</h2>
+				<input type="date" id="addTimeInput" value="2024-03-10" />
+				<input type="number" id="addAmount" value="2" placeholder="Amount" />
+				<select id="addUnit">
+					<option value="day">Day</option>
+					<option value="week">Week</option>
+					<option value="month">Month</option>
+					<option value="year">Year</option>
+				</select>
+				<button onclick="testAddTime()">Add Time</button>
+				<div id="addTimeResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h2>4. Date Difference</h2>
+				<input type="date" id="diffDate1" value="2024-01-01" />
+				<input type="date" id="diffDate2" value="2024-01-31" />
+				<select id="diffUnit">
+					<option value="days">Days</option>
+					<option value="weeks">Weeks</option>
+					<option value="months">Months</option>
+					<option value="years">Years</option>
+				</select>
+				<button onclick="testDateDiff()">Calculate Difference</button>
+				<div id="diffResult" class="result"></div>
+			</div>
+
+			<div class="test-section">
+				<h2>5. Date Comparisons</h2>
+				<input type="date" id="compareDate1" value="2024-03-10" />
+				<input type="date" id="compareDate2" value="2024-03-15" />
+				<button onclick="testComparisons()">Compare Dates</button>
+				<div id="compareResult" class="result"></div>
+			</div>
+		</div>
+
+		<script>
+			// DateUtil class implementation
+			class DateUtil {
+				static formatDate(date, format) {
+					const options = {};
+					if (format.includes('YYYY')) options.year = 'numeric';
+					if (format.includes('MM')) options.month = '2-digit';
+					if (format.includes('DD')) options.day = '2-digit';
+					return new Intl.DateTimeFormat('en-US', options).format(date);
+				}
+
+				static parseDate(dateString, format) {
+					const parts = dateString.split(/[-/]/);
+					let year = null,
+						month = null,
+						day = null;
+
+					if (format === 'YYYY-MM-DD') {
+						year = parseInt(parts[0], 10);
+						month = parseInt(parts[1], 10) - 1;
+						day = parseInt(parts[2], 10);
+					} else if (format === 'DD-MM-YYYY') {
+						day = parseInt(parts[0], 10);
+						month = parseInt(parts[1], 10) - 1;
+						year = parseInt(parts[2], 10);
+					} else {
+						throw new Error('Unsupported date format');
+					}
+
+					if (year && month !== null && day) {
+						return new Date(year, month, day);
+					}
+					return null;
+				}
+
+				static addTime(date, amount, unit) {
+					const result = new Date(date);
+					switch (unit) {
+						case 'day':
+							result.setDate(result.getDate() + amount);
+							break;
+						case 'week':
+							result.setDate(result.getDate() + amount * 7);
+							break;
+						case 'month':
+							result.setMonth(result.getMonth() + amount);
+							break;
+						case 'year':
+							result.setFullYear(result.getFullYear() + amount);
+							break;
+						default:
+							throw new Error('Unsupported time unit');
+					}
+					return result;
+				}
+
+				static getDateDiff(date1, date2, unit) {
+					const timeDiff = Math.abs(date2.getTime() - date1.getTime());
+					switch (unit) {
+						case 'days':
+							return Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+						case 'weeks':
+							return Math.floor(timeDiff / (1000 * 60 * 60 * 24 * 7));
+						case 'months':
+							const yearDiff = date2.getFullYear() - date1.getFullYear();
+							const monthDiff = date2.getMonth() - date1.getMonth();
+							return Math.abs(yearDiff * 12 + monthDiff);
+						case 'years':
+							return Math.abs(date2.getFullYear() - date1.getFullYear());
+						default:
+							throw new Error('Unsupported time unit');
+					}
+				}
+
+				static isAfter(date1, date2) {
+					return date1.getTime() > date2.getTime();
+				}
+
+				static isBefore(date1, date2) {
+					return date1.getTime() < date2.getTime();
+				}
+
+				static isSameDay(date1, date2) {
+					return (
+						date1.getFullYear() === date2.getFullYear() &&
+						date1.getMonth() === date2.getMonth() &&
+						date1.getDate() === date2.getDate()
+					);
+				}
+			}
+
+			// Test functions
+			function testFormatDate() {
+				try {
+					const dateInput = document.getElementById('formatInput').value;
+					const format = document.getElementById('formatPattern').value;
+					const date = new Date(dateInput);
+					const result = DateUtil.formatDate(date, format);
+					document.getElementById(
+						'formatResult'
+					).innerHTML = `Input: ${dateInput}<br>Format: ${format}<br>Result: <strong>${result}</strong>`;
+				} catch (error) {
+					document.getElementById('formatResult').innerHTML = `Error: ${error.message}`;
+				}
+			}
+
+			function testParseDate() {
+				try {
+					const dateString = document.getElementById('parseInput').value;
+					const format = document.getElementById('parsePattern').value;
+					const result = DateUtil.parseDate(dateString, format);
+					document.getElementById(
+						'parseResult'
+					).innerHTML = `Input: ${dateString}<br>Format: ${format}<br>Result: <strong>${
+						result ? result.toDateString() : 'null'
+					}</strong>`;
+				} catch (error) {
+					document.getElementById('parseResult').innerHTML = `Error: ${error.message}`;
+				}
+			}
+
+			function testAddTime() {
+				try {
+					const dateInput = document.getElementById('addTimeInput').value;
+					const amount = parseInt(document.getElementById('addAmount').value);
+					const unit = document.getElementById('addUnit').value;
+					const date = new Date(dateInput);
+					const result = DateUtil.addTime(date, amount, unit);
+					document.getElementById(
+						'addTimeResult'
+					).innerHTML = `Original: ${date.toDateString()}<br>Add: ${amount} ${unit}(s)<br>Result: <strong>${result.toDateString()}</strong>`;
+				} catch (error) {
+					document.getElementById('addTimeResult').innerHTML = `Error: ${error.message}`;
+				}
+			}
+
+			function testDateDiff() {
+				try {
+					const date1Input = document.getElementById('diffDate1').value;
+					const date2Input = document.getElementById('diffDate2').value;
+					const unit = document.getElementById('diffUnit').value;
+					const date1 = new Date(date1Input);
+					const date2 = new Date(date2Input);
+					const result = DateUtil.getDateDiff(date1, date2, unit);
+					document.getElementById(
+						'diffResult'
+					).innerHTML = `Date 1: ${date1.toDateString()}<br>Date 2: ${date2.toDateString()}<br>Difference: <strong>${result} ${unit}</strong>`;
+				} catch (error) {
+					document.getElementById('diffResult').innerHTML = `Error: ${error.message}`;
+				}
+			}
+
+			function testComparisons() {
+				try {
+					const date1Input = document.getElementById('compareDate1').value;
+					const date2Input = document.getElementById('compareDate2').value;
+					const date1 = new Date(date1Input);
+					const date2 = new Date(date2Input);
+
+					const isAfter = DateUtil.isAfter(date1, date2);
+					const isBefore = DateUtil.isBefore(date1, date2);
+					const isSame = DateUtil.isSameDay(date1, date2);
+
+					document.getElementById('compareResult').innerHTML =
+						`Date 1: ${date1.toDateString()}<br>Date 2: ${date2.toDateString()}<br>` +
+						`Date1 is after Date2: <strong>${isAfter}</strong><br>` +
+						`Date1 is before Date2: <strong>${isBefore}</strong><br>` +
+						`Same day: <strong>${isSame}</strong>`;
+				} catch (error) {
+					document.getElementById('compareResult').innerHTML = `Error: ${error.message}`;
+				}
+			}
+
+			// Auto-run some examples on page load
+			window.onload = function () {
+				testFormatDate();
+				testParseDate();
+				testAddTime();
+				testDateDiff();
+				testComparisons();
+			};
+		</script>
+	</body>
+</html>
