@@ -1,0 +1,31 @@
+{
+	"github.copilot.chat.scopeSelection": true,
+	"github.copilot.chat.enable": true,
+	"github.copilot.chat.generateTests.codeLens": true,
+	"github.copilot.chat.edits.temporalContext.enabled": true,
+	"github.copilot.chat.search.semanticTextResults": true,
+
+	"github.copilot.enable": {
+		"*": true,
+		"plaintext": false,
+		"markdown": true,
+		"scminput": true,
+		"javascript": true,
+		"typescript": true
+	},
+	"github.copilot.chat.codesearch.enabled": true,
+	//"github.copilot.chat.completionContext.typescript.mode": "on",
+
+	"github.copilot.advanced": {
+		"enableExperimentalFeatures": true,
+		"enableExperimentalChat": true,
+		"enableExperimentalEdits": true,
+		"enableExperimentalCodesearch": true,
+		"enableExperimentalContextualCompletions": true,
+		"enableExperimentalChatEdits": true,
+		"enableExperimentalChatCodesearch": true
+	},
+	"github.copilot.selectedCompletionModel": "gpt-4o-copilot",
+	// "github.copilot.selectedCompletionModel": "Claude 3.7 Sonnet (Preview)",
+	"github.copilot.nextEditSuggestions.enabled": false
+}
